@@ -9,17 +9,27 @@ const FightPreview = () => {
         fetch('https://pokeapi.co/api/v2/pokemon?limit=151') // Limiting to the first 151 pokemons for simplicity
             .then(response => response.json())
             .then(data => {
-                const formattedPokemons = data.results.map((pokemon, index) => ({
-                    id: index + 1, // Since PokeAPI starts from index 1
-                    name: { english: pokemon.name }
-                }));
-                setPokemons(formattedPokemons);
+                Promise.all(data.results.map(pokemon => fetch(pokemon.url).then(res => res.json())))
+                    .then(pokemonDetails => {
+                        const formattedPokemons = pokemonDetails.map((pokemon, index) => ({
+                            id: index + 1, // Since PokeAPI starts from index 1
+                            name: { english: pokemon.name },
+                            abilities: pokemon.abilities,
+                            stats: pokemon.stats,
+                            types: pokemon.types
+                        }));
+                        setPokemons(formattedPokemons);
+                    });
             })
             .catch(error => console.error("There was an error fetching the pokemons:", error));
     }, []);
 
     const handleFight = () => {
         alert('Fight!');
+    };
+
+    const capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
     const renderPokemonCard = (pokemon) => {
@@ -29,16 +39,15 @@ const FightPreview = () => {
             <div className="bg-white rounded-lg shadow-lg p-4 flex">
                 <img src={`https://img.pokemondb.net/artwork/${pokemon.name.english.toLowerCase()}.jpg`} alt={pokemon.name.english} className="w-32 h-32" />
                 <div className="ml-4">
-                    <h3 className="text-xl font-bold">{pokemon.name.english}</h3>
-                    <p>Abilities: {pokemon.abilities ? pokemon.abilities.map(ability => ability.ability.name).join(' - ') : 'Unknown'}</p>
-                    <p>Hit Points: {pokemon.stats ? pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat : 'Unknown'}</p>
-                    <div className="mt-2">
-                        <div>Defense: {pokemon.stats ? pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat : 'Unknown'}</div>
-                        <div>Attack: {pokemon.stats ? pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat : 'Unknown'}</div>
-                        <div>Sp. Attack: {pokemon.stats ? pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat : 'Unknown'}</div>
-                        <div>Sp. Defense: {pokemon.stats ? pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat : 'Unknown'}</div>
-                        <div>Speed: {pokemon.stats ? pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat : 'Unknown'}</div>
-                    </div>
+                    <h3 className="text-xl font-bold">{capitalizeFirstLetter(pokemon.name.english)}</h3>
+                    <p>Abilities: {pokemon.abilities ? pokemon.abilities.map(ability => capitalizeFirstLetter(ability.ability.name)).join(', ') : 'Unknown'}</p>
+                    <p>Stats:</p>
+                    <ul>
+                        {pokemon.stats.map(stat => (
+                            <li key={stat.stat.name}>{capitalizeFirstLetter(stat.stat.name)}: {stat.base_stat}</li>
+                        ))}
+                    </ul>
+                    <p>Types: {pokemon.types.map(type => capitalizeFirstLetter(type.type.name)).join(', ')}</p>
                 </div>
             </div>
         );
@@ -54,7 +63,7 @@ const FightPreview = () => {
                 >
                     <option value="" disabled>Select Pokemon</option>
                     {pokemons.map(pokemon => (
-                        <option key={pokemon.id} value={pokemon.id}>{pokemon.name.english}</option>
+                        <option key={pokemon.id} value={pokemon.id}>{pokemon.name.english.charAt(0).toUpperCase() + pokemon.name.english.slice(1)}</option>
                     ))}
                 </select>
                 <span className="text-2xl">VS</span>
@@ -65,7 +74,7 @@ const FightPreview = () => {
                 >
                     <option value="" disabled>Select Pokemon</option>
                     {pokemons.map(pokemon => (
-                        <option key={pokemon.id} value={pokemon.id}>{pokemon.name.english}</option>
+                        <option key={pokemon.id} value={pokemon.id}>{pokemon.name.english.charAt(0).toUpperCase() + pokemon.name.english.slice(1)}</option>
                     ))}
                 </select>
             </div>
