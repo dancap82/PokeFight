@@ -18,7 +18,7 @@ const FightPreview = () => {
                             name: { english: pokemon.name },
                             abilities: pokemon.abilities,
                             stats: pokemon.stats,
-                            types: pokemon.types
+                            types: pokemon.types.map(type => type.type.name) // Extract type names
                         }));
                         setPokemons(formattedPokemons);
                     });
@@ -26,47 +26,93 @@ const FightPreview = () => {
             .catch(error => console.error("There was an error fetching the pokemons:", error));
     }, []);
 
+    const typeChart = {
+        normal: { normal: 1, fire: 1, water: 1, electric: 1, grass: 1, ice: 1, fighting: 1, poison: 1, ground: 1, flying: 1, psychic: 1, bug: 1, rock: 0.5, ghost: 0, dragon: 1, dark: 1, steel: 0.5, fairy: 1 },
+        fire: { normal: 1, fire: 0.5, water: 0.5, electric: 1, grass: 2, ice: 2, fighting: 1, poison: 1, ground: 1, flying: 1, psychic: 1, bug: 2, rock: 0.5, ghost: 1, dragon: 0.5, dark: 1, steel: 2, fairy: 1 },
+        water: { normal: 1, fire: 2, water: 0.5, electric: 1, grass: 0.5, ice: 1, fighting: 1, poison: 1, ground: 2, flying: 1, psychic: 1, bug: 1, rock: 2, ghost: 1, dragon: 0.5, dark: 1, steel: 1, fairy: 1 },
+        electric: { normal: 1, fire: 1, water: 2, electric: 0.5, grass: 0.5, ice: 1, fighting: 1, poison: 1, ground: 0, flying: 2, psychic: 1, bug: 1, rock: 1, ghost: 1, dragon: 0.5, dark: 1, steel: 1, fairy: 1 },
+        grass: { normal: 1, fire: 0.5, water: 2, electric: 1, grass: 0.5, ice: 1, fighting: 1, poison: 0.5, ground: 2, flying: 0.5, psychic: 1, bug: 0.5, rock: 2, ghost: 1, dragon: 0.5, dark: 1, steel: 0.5, fairy: 1 },
+        ice: { normal: 1, fire: 0.5, water: 0.5, electric: 1, grass: 2, ice: 0.5, fighting: 1, poison: 1, ground: 2, flying: 2, psychic: 1, bug: 1, rock: 1, ghost: 1, dragon: 2, dark: 1, steel: 0.5, fairy: 1 },
+        fighting: { normal: 2, fire: 1, water: 1, electric: 1, grass: 1, ice: 2, fighting: 1, poison: 0.5, ground: 1, flying: 0.5, psychic: 0.5, bug: 0.5, rock: 2, ghost: 0, dragon: 1, dark: 2, steel: 2, fairy: 0.5 },
+        poison: { normal: 1, fire: 1, water: 1, electric: 1, grass: 2, ice: 1, fighting: 1, poison: 0.5, ground: 0.5, flying: 1, psychic: 1, bug: 1, rock: 0.5, ghost: 0.5, dragon: 1, dark: 1, steel: 0, fairy: 2 },
+        ground: { normal: 1, fire: 2, water: 1, electric: 2, grass: 0.5, ice: 1, fighting: 1, poison: 2, ground: 1, flying: 0, psychic: 1, bug: 0.5, rock: 2, ghost: 1, dragon: 1, dark: 1, steel: 2, fairy: 1 },
+        flying: { normal: 1, fire: 1, water: 1, electric: 0.5, grass: 2, ice: 1, fighting: 2, poison: 1, ground: 1, flying: 1, psychic: 1, bug: 2, rock: 0.5, ghost: 1, dragon: 1, dark: 1, steel: 0.5, fairy: 1 },
+        psychic: { normal: 1, fire: 1, water: 1, electric: 1, grass: 1, ice: 1, fighting: 2, poison: 2, ground: 1, flying: 1, psychic: 0.5, bug: 1, rock: 1, ghost: 1, dragon: 1, dark: 0, steel: 0.5, fairy: 1 },
+        bug: { normal: 1, fire: 0.5, water: 1, electric: 1, grass: 2, ice: 1, fighting: 0.5, poison: 0.5, ground: 1, flying: 0.5, psychic: 2, bug: 1, rock: 1, ghost: 0.5, dragon: 1, dark: 2, steel: 0.5, fairy: 0.5 },
+        rock: { normal: 1, fire: 2, water: 1, electric: 1, grass: 1, ice: 2, fighting: 0.5, poison: 1, ground: 0.5, flying: 2, psychic: 1, bug: 2, rock: 1, ghost: 1, dragon: 1, dark: 1, steel: 0.5, fairy: 1 },
+        ghost: { normal: 0, fire: 1, water: 1, electric: 1, grass: 1, ice: 1, fighting: 1, poison: 1, ground: 1, flying: 1, psychic: 2, bug: 1, rock: 1, ghost: 2, dragon: 1, dark: 0.5, steel: 1, fairy: 1 },
+        dragon: { normal: 1, fire: 1, water: 1, electric: 1, grass: 1, ice: 1, fighting: 1, poison: 1, ground: 1, flying: 1, psychic: 1, bug: 1, rock: 1, ghost: 1, dragon: 2, dark: 1, steel: 0.5, fairy: 0 },
+        dark: { normal: 1, fire: 1, water: 1, electric: 1, grass: 1, ice: 1, fighting: 0.5, poison: 1, ground: 1, flying: 1, psychic: 2, bug: 1, rock: 1, ghost: 2, dragon: 1, dark: 0.5, steel: 1, fairy: 0.5 },
+        steel: { normal: 1, fire: 0.5, water: 0.5, electric: 0.5, grass: 1, ice: 2, fighting: 1, poison: 1, ground: 1, flying: 1, psychic: 1, bug: 1, rock: 2, ghost: 1, dragon: 1, dark: 1, steel: 0.5, fairy: 2 },
+        fairy: { normal: 1, fire: 0.5, water: 1, electric: 1, grass: 1, ice: 1, fighting: 2, poison: 0.5, ground: 1, flying: 1, psychic: 1, bug: 1, rock: 1, ghost: 1, dragon: 2, dark: 2, steel: 0.5, fairy: 1 }
+    };
+
+    const calculateDamage = (attack, defense, attackerTypes, defenderTypes) => {
+        let effectivenessMultiplier = 1;
+        attackerTypes.forEach(attackerType => {
+            defenderTypes.forEach(defenderType => {
+                if (typeChart[attackerType] && typeChart[attackerType][defenderType] !== undefined) {
+                    effectivenessMultiplier *= typeChart[attackerType][defenderType];
+                }
+            });
+        });
+        return Math.max(1, Math.floor(attack * effectivenessMultiplier) - defense);
+    };
+
+    const getTypeMultiplier = (attackingTypes, defendingTypes) => {
+        let multiplier = 1;
+        attackingTypes.forEach(attackingType => {
+            defendingTypes.forEach(defendingType => {
+                multiplier *= typeChart[attackingType][defendingType];
+            });
+        });
+        return multiplier;
+    };
+
     const handleFight = () => {
         if (!selectedPokemons.left || !selectedPokemons.right) {
             alert('Please select both pokemons.');
             return;
         }
-
+    
         const leftPokemon = pokemons.find(p => p.id === parseInt(selectedPokemons.left));
         const rightPokemon = pokemons.find(p => p.id === parseInt(selectedPokemons.right));
-
+    
         setLeftHP(leftPokemon.stats.find(stat => stat.stat.name === 'hp').base_stat);
         setRightHP(rightPokemon.stats.find(stat => stat.stat.name === 'hp').base_stat);
-
+    
         let log = [];
         let leftCurrentHP = leftPokemon.stats.find(stat => stat.stat.name === 'hp').base_stat;
         let rightCurrentHP = rightPokemon.stats.find(stat => stat.stat.name === 'hp').base_stat;
-
+    
         while (leftCurrentHP > 0 && rightCurrentHP > 0) {
             const leftAttack = leftPokemon.stats.find(stat => stat.stat.name === 'attack').base_stat;
             const rightDefense = rightPokemon.stats.find(stat => stat.stat.name === 'defense').base_stat;
             const rightAttack = rightPokemon.stats.find(stat => stat.stat.name === 'attack').base_stat;
             const leftDefense = leftPokemon.stats.find(stat => stat.stat.name === 'defense').base_stat;
-
-            let damageToRight = Math.max(1, leftAttack - rightDefense);
+    
+            const effectivenessMultiplierLeft = getTypeMultiplier(leftPokemon.types, rightPokemon.types);
+            const effectivenessMultiplierRight = getTypeMultiplier(rightPokemon.types, leftPokemon.types);
+    
+            let damageToRight = calculateDamage(leftAttack, rightDefense, leftPokemon.types, rightPokemon.types);
             rightCurrentHP -= damageToRight;
-            log.push(`${capitalizeFirstLetter(leftPokemon.name.english)} attacks ${capitalizeFirstLetter(rightPokemon.name.english)} for ${damageToRight} damage! (${capitalizeFirstLetter(rightPokemon.name.english)} has ${rightCurrentHP}HP left!)`);
+            log.push(<><span style={{ color: 'green' }}>{capitalizeFirstLetter(leftPokemon.name.english)}</span> attacks <span style={{ color: 'red' }}>{capitalizeFirstLetter(rightPokemon.name.english)}</span> for <strong>{damageToRight}</strong> damage! (<span style={{ color: 'red' }}>{capitalizeFirstLetter(rightPokemon.name.english)}</span> has <strong>{rightCurrentHP}HP</strong> left!) <u><strong>(x{effectivenessMultiplierLeft})</strong></u></>);
             if (rightCurrentHP <= 0) {
-                log.push(<br key="emptyLine" />)
-                log.push(`${capitalizeFirstLetter(rightPokemon.name.english)} fainted!`);
+                log.push(<br key="emptyLine1" />)
+                log.push(<><strong>{capitalizeFirstLetter(rightPokemon.name.english)}</strong> fainted!</>);
                 break;
             }
-
-            let damageToLeft = Math.max(1, rightAttack - leftDefense);
+    
+            let damageToLeft = calculateDamage(rightAttack, leftDefense, rightPokemon.types, leftPokemon.types);
             leftCurrentHP -= damageToLeft;
-            log.push(`${capitalizeFirstLetter(rightPokemon.name.english)} attacks ${capitalizeFirstLetter(leftPokemon.name.english)} for ${damageToLeft} damage! (${capitalizeFirstLetter(leftPokemon.name.english)} has ${leftCurrentHP}HP left!)`);
+            log.push(<><span style={{ color: 'red' }}>{capitalizeFirstLetter(rightPokemon.name.english)}</span> attacks <span style={{ color: 'green' }}>{capitalizeFirstLetter(leftPokemon.name.english)}</span> for <strong>{damageToLeft}</strong> damage! (<span style={{ color: 'green' }}>{capitalizeFirstLetter(leftPokemon.name.english)}</span> has <strong>{leftCurrentHP}HP</strong> left!) <u><strong>(x{effectivenessMultiplierRight})</strong></u></>);
             if (leftCurrentHP <= 0) {
-                log.push(<br key="emptyLine" />)
-                log.push(`${capitalizeFirstLetter(leftPokemon.name.english)} fainted!`);
+                log.push(<br key="emptyLine2" />)
+                log.push(<><strong>{capitalizeFirstLetter(leftPokemon.name.english)}</strong> fainted!</>);
                 break;
             }
         }
-
+    
         setBattleLog(log);
         setLeftHP(leftCurrentHP);
         setRightHP(rightCurrentHP);
@@ -91,7 +137,7 @@ const FightPreview = () => {
                             <li key={stat.stat.name}>{capitalizeFirstLetter(stat.stat.name)}: {stat.base_stat}</li>
                         ))}
                     </ul>
-                    <p>Types: {pokemon.types.map(type => capitalizeFirstLetter(type.type.name)).join(', ')}</p>
+                    <p>Types: {pokemon.types.map(type => capitalizeFirstLetter(type)).join(', ')}</p>
                 </div>
             </div>
         );
