@@ -5,7 +5,7 @@ const pokemonControllers = require ("../controllers/pokemonControllers");
 
 router.get("/", pokemonControllers.getAllPokemons);
 router.get("/:id", pokemonControllers.getPokemonById);
-router.get("/:id/:info", pokemonControllers.getPokemonInfo);
+router.get("/:id/*", pokemonControllers.getPokemonInfo);
 
 
 
