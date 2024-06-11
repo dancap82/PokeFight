@@ -51,7 +51,7 @@ const Cards = () => {
           >
             <div className="mb-2 flex flex-col">
               <div className="rounded-t-xl shadow-lg bg-yellow-400">
-                <h5 className="text-xl py-2 text-blue-700 font-bold font-sans-serif">
+                <h5 className="text-xl py-2 justify-center flex text-blue-700 font-bold font-sans-serif">
                   {pokemon.name.toUpperCase()}
                 </h5>
               </div>
