@@ -1,14 +1,17 @@
-import './App.css'
-import FightPreview from './assets/components/FightPreview'
+import "./App.css";
+import { Route, Routes, useParams } from "react-router-dom";
+import Layout from "./components/Layout";
+import Main from "./components/Main";
 
 function App() {
-
-
   return (
-    <>
-
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Main />} />
+        <Route path="/pokemon/:id/:info" />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;
