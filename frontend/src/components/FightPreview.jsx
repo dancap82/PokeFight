@@ -3,16 +3,18 @@ import React, { useEffect, useState } from 'react';
 const FightPreview = () => {
     const [pokemons, setPokemons] = useState([]);
     const [selectedPokemons, setSelectedPokemons] = useState({ left: null, right: null });
+    const [battleLog, setBattleLog] = useState([]);
+    const [leftHP, setLeftHP] = useState(0);
+    const [rightHP, setRightHP] = useState(0);
 
     useEffect(() => {
-        // Fetch all pokemons from PokeAPI
-        fetch('https://pokeapi.co/api/v2/pokemon?limit=151') // Limiting to the first 151 pokemons for simplicity
+        fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
             .then(response => response.json())
             .then(data => {
                 Promise.all(data.results.map(pokemon => fetch(pokemon.url).then(res => res.json())))
                     .then(pokemonDetails => {
                         const formattedPokemons = pokemonDetails.map((pokemon, index) => ({
-                            id: index + 1, // Since PokeAPI starts from index 1
+                            id: index + 1,
                             name: { english: pokemon.name },
                             abilities: pokemon.abilities,
                             stats: pokemon.stats,
@@ -25,7 +27,49 @@ const FightPreview = () => {
     }, []);
 
     const handleFight = () => {
-        alert('Fight!');
+        if (!selectedPokemons.left || !selectedPokemons.right) {
+            alert('Please select both pokemons.');
+            return;
+        }
+
+        const leftPokemon = pokemons.find(p => p.id === parseInt(selectedPokemons.left));
+        const rightPokemon = pokemons.find(p => p.id === parseInt(selectedPokemons.right));
+
+        setLeftHP(leftPokemon.stats.find(stat => stat.stat.name === 'hp').base_stat);
+        setRightHP(rightPokemon.stats.find(stat => stat.stat.name === 'hp').base_stat);
+
+        let log = [];
+        let leftCurrentHP = leftPokemon.stats.find(stat => stat.stat.name === 'hp').base_stat;
+        let rightCurrentHP = rightPokemon.stats.find(stat => stat.stat.name === 'hp').base_stat;
+
+        while (leftCurrentHP > 0 && rightCurrentHP > 0) {
+            const leftAttack = leftPokemon.stats.find(stat => stat.stat.name === 'attack').base_stat;
+            const rightDefense = rightPokemon.stats.find(stat => stat.stat.name === 'defense').base_stat;
+            const rightAttack = rightPokemon.stats.find(stat => stat.stat.name === 'attack').base_stat;
+            const leftDefense = leftPokemon.stats.find(stat => stat.stat.name === 'defense').base_stat;
+
+            let damageToRight = Math.max(1, leftAttack - rightDefense);
+            rightCurrentHP -= damageToRight;
+            log.push(`${capitalizeFirstLetter(leftPokemon.name.english)} attacks ${capitalizeFirstLetter(rightPokemon.name.english)} for ${damageToRight} damage! (${capitalizeFirstLetter(rightPokemon.name.english)} has ${rightCurrentHP}HP left!)`);
+            if (rightCurrentHP <= 0) {
+                log.push(<br key="emptyLine" />)
+                log.push(`${capitalizeFirstLetter(rightPokemon.name.english)} fainted!`);
+                break;
+            }
+
+            let damageToLeft = Math.max(1, rightAttack - leftDefense);
+            leftCurrentHP -= damageToLeft;
+            log.push(`${capitalizeFirstLetter(rightPokemon.name.english)} attacks ${capitalizeFirstLetter(leftPokemon.name.english)} for ${damageToLeft} damage! (${capitalizeFirstLetter(leftPokemon.name.english)} has ${leftCurrentHP}HP left!)`);
+            if (leftCurrentHP <= 0) {
+                log.push(<br key="emptyLine" />)
+                log.push(`${capitalizeFirstLetter(leftPokemon.name.english)} fainted!`);
+                break;
+            }
+        }
+
+        setBattleLog(log);
+        setLeftHP(leftCurrentHP);
+        setRightHP(rightCurrentHP);
     };
 
     const capitalizeFirstLetter = (string) => {
@@ -33,7 +77,7 @@ const FightPreview = () => {
     };
 
     const renderPokemonCard = (pokemon) => {
-        if (!pokemon) return null; // Handle case where pokemon is not defined
+        if (!pokemon) return null;
 
         return (
             <div className="bg-white rounded-lg shadow-lg p-4 flex">
@@ -54,7 +98,7 @@ const FightPreview = () => {
     };
 
     return (
-        <div className="flex flex-col items-center space-y-8">
+        <div className="flex flex-col items-center space-y-8 mt-10">
             <div className="flex items-center space-x-4">
                 <select
                     onChange={(e) => setSelectedPokemons({ ...selectedPokemons, left: e.target.value })}
@@ -85,6 +129,11 @@ const FightPreview = () => {
             <button onClick={handleFight} className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                 Fight
             </button>
+            <div className="w-2/4 text-black text-center p-4 mt-10 mb-10">
+                {battleLog.map((log, index) => (
+                    <p key={index}>{log}</p>
+                ))}
+            </div>
         </div>
     );
 };
