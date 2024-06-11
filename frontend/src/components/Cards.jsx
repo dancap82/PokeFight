@@ -39,7 +39,7 @@ const Cards = () => {
   if (!pokemonList.length) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-60 container mx-auto overflow-hidden px-4">
+    <div className="min-h-60 container mx-auto overflow-hidden pt-4 px-4">
       <div className="flex justify-center items-center">
         <img src={pokemon} className="w-48 justify-center " alt="" />
       </div>
