@@ -1,11 +1,21 @@
 import "./App.css";
-import Cards from "./components/Cards"
+import { Route, Routes, useParams } from "react-router-dom";
+import Layout from "./components/Layout";
+import Main from "./components/Main";
+import Cards from './components/Cards';
+import FightPreview from "./components/FightPreview";
+
 
 function App() {
   return (
-    <>
-      <Cards />
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Main />} />
+        <Route path="/pokedex" element={<Cards />} />
+        <Route path="/fight" element={<FightPreview />} />
+        <Route path="/pokemon/:id/:info" />
+      </Route>
+    </Routes>
   );
 }
 
