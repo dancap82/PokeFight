@@ -5,6 +5,7 @@ import facebook from "../assets/icons/facebook-50.png";
 import instagram from "../assets/icons/instagram-50.png";
 import tiktok from "../assets/icons/tiktok-50.png";
 import youtube from "../assets/icons/youtube-50.png";
+import Cards from "./Cards";
 
 function Main() {
   return (
@@ -21,9 +22,7 @@ function Main() {
           </p>
         </div>
       </section>
-
-      {/* HERE SHOULD GO POKEDEX COMPONENT */}
-
+      <Cards />
       <footer className="bg-black flex flex-col md:flex-row p-4 text-center md:text-left justify-around">
         <img className="w-80 mx-auto md:mx-0" src={logo} alt="logo-pokemon" />
         <div className="flex flex-col justify-center mt-4 md:mt-0 md:items-start">
