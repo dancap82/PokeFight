@@ -13,9 +13,9 @@ function Layout() {
         <div
           class="flex align-middle gap-4 md:gap-8 lg:gap-20 xl:gap-32 2xl:gap-40"
         >
-          <NavLink class="navlinks" href="/"> Home </NavLink>
-          <NavLink class="navlinks" href=""> Pokédex </NavLink>
-          <NavLink class="navlinks" href=""> Fight </NavLink>
+          <NavLink class="navlinks" to="/"> Home </NavLink>
+          <NavLink class="navlinks" to="/pokedex"> Pokédex </NavLink>
+          <NavLink class="navlinks" to="/fight"> Fight </NavLink>
         </div>
       </nav>
       <main>
