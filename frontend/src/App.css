@@ -14,3 +14,17 @@
 .nav {
   background-color:#f5db13;
 }
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-out;
+}
