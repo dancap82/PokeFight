@@ -8,7 +8,7 @@ const Cards = () => {
 
   useEffect(() => {
     axios
-      .get("https://pokeapi.co/api/v2/pokemon?limit=100")
+      .get("https://pokeapi.co/api/v2/pokemon?limit=151")
       .then((response) => {
         const promises = response.data.results.map((pokemon) =>
           axios.get(pokemon.url)

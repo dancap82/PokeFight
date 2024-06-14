@@ -7,15 +7,16 @@ function Layout() {
   return (
     <>
       <nav
-        class="flex nav justify-between py-4 px-6 md:px-20 lg:px-28 xl:px-36 2xl:px-60 items-center"
+        className="flex nav justify-between py-4 px-6 md:px-20 lg:px-28 xl:px-36 2xl:px-60 items-center"
       >
         <img className="w-32" src={logo} alt="pokemon-logo" />
         <div
-          class="flex align-middle gap-4 md:gap-8 lg:gap-20 xl:gap-32 2xl:gap-40"
+          className="flex align-middle gap-4 md:gap-8 lg:gap-20 xl:gap-32 2xl:gap-40"
         >
-          <NavLink class="navlinks" to="/"> Home </NavLink>
-          <NavLink class="navlinks" to="/pokedex"> Pokédex </NavLink>
-          <NavLink class="navlinks" to="/fight"> Fight </NavLink>
+          <NavLink className="navlinks" to="/"> Home </NavLink>
+          <NavLink className="navlinks" to="/pokedex"> Pokédex </NavLink>
+          <NavLink className="navlinks" to="/fight"> Fight </NavLink>
+          <NavLink className="navlinks" to="/FightResults"> Fight Results </NavLink>
         </div>
       </nav>
       <main>

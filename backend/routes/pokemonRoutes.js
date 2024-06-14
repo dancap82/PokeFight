@@ -9,6 +9,4 @@ router.get("/:id/*", pokemonControllers.getPokemonInfo);
 
 
 
-
-
 module.exports = router;
