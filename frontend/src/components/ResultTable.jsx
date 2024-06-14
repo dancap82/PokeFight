@@ -21,41 +21,45 @@ const ResultsTable = () => {
     fetchBattleHistory();
   }, []);
 
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+};  
+
   return (
-    <div className=" bg-yellow-200 h-screen">
+    <div className=" bg-yellow-200">
         <div className=" flex justify-center">
             <h2 className="py-5 text-4xl font-bold">Fight Results Table</h2>
           </div>
         <div className="flex justify-center item-center">
         
           <table className="mb-10 shadow-2xl font-[Poppins] border-2 border-white w-2/3">
-            <thead className="text-white">
-              <tr>
-                <th className="py-2 bg-orange-500 ">Pokemon 1</th>
-                <th className="py-2 bg-orange-500">Pokemon 2</th>
-                <th className="py-2 bg-orange-500">Winner</th>
-                <th className="py-2 bg-orange-500">Battle Log</th>
+            <thead className="text-white" >
+              <tr className="bg-orange-500 text-xl">
+                <th>Pokemon 1</th>
+                <th>Pokemon 2</th>
+                <th>Winner</th>
+                <th>Battle Log</th>
               </tr>
             </thead>
-            <tbody className="text-slate-500 text-center border-2 border-white">
+            <tbody className="text-slate-500 text-center  border-2 border-white">
               {battleHistory.map((fight, index) => (
                 <tr
                   className="bg-orange-200 cursor-pointer duration-300"
                   key={index}
                 >
                   <td className="py-3 px-6 border-2 border-white">
-                    {fight.pokemon1}
+                    {capitalizeFirstLetter(fight.pokemon1)}
                   </td>
                   <td className="py-3 px-6 border-2 border-white">
-                    {fight.pokemon2}
+                    {capitalizeFirstLetter(fight.pokemon2)}
                   </td>
                   <td className="py-3 px-6 border-2 border-white">
-                    {fight.winner}
+                    {capitalizeFirstLetter(fight.winner)}
                   </td>
-                  <td className="py-3 px-6 border-2 border-white">
+                  <td className="py-3 px-6 border-2 text-justify border-white">
                     <ul>
                       {fight.battleLog.map((log, idx) => (
-                        <li key={idx}>{log}</li>
+                        <li key={idx}>{capitalizeFirstLetter(log)}</li>
                       ))}
                     </ul>
                   </td>
