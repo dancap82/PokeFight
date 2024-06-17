@@ -1,3 +1,4 @@
+import "../App.css";
 
 
 import React, { useEffect, useState } from "react";
@@ -217,7 +218,7 @@ const FightPreview = () => {
 
 
   return (
-    <div className="flex flex-col items-center space-y-8 my-12">
+    <div className="fixedheight flex flex-col items-center space-y-8 my-12">
       <div className="flex items-center space-x-4">
         <select
           onChange={handleLeftPokemonSelect}
