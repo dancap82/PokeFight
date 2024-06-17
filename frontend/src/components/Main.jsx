@@ -6,11 +6,11 @@ function Main() {
     <>
       <section className="background-image h-screen w-screen">
         <div className="pt-8 md:pt-40 lg:pt-40 xl:pt-40 2xl:pt-40 px-8 md:px-12 lg:px-24 lg:w-2/3">
-          <h1 className="text-6xl font-medium">
+          <h1 className="font text-6xl font-medium">
             Find all your favorite Pokemon
           </h1>
           <br />
-          <p className="text-3xl font-medium pt-4">
+          <p className="font text-3xl font-medium pt-4">
             You can know the type of Pokemon, its strengths, disadvantages and
             abilities
           </p>

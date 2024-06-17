@@ -1,4 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { useState, useRef } from "react";
+import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
+import { IonIcon } from "react-ionicons";
 import logo from "../assets/imgs/pokemon-23.svg";
 import facebook from "../assets/icons/facebook-50.png";
 import instagram from "../assets/icons/instagram-50.png";
@@ -7,28 +10,74 @@ import youtube from "../assets/icons/youtube-50.png";
 import "../App.css";
 
 function Layout() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const listRef = useRef(null);
+
+  const handleMenuToggle = () => {
+    const list = listRef.current;
+    if (!list) return;
+
+    if (isMenuOpen) {
+      list.classList.remove("top-[60px]");
+      list.classList.remove("opacity-100");
+      list.classList.add("absolute");
+      list.classList.remove("pointer-events-auto");
+    } else {
+      list.classList.add("top-[60px]");
+      list.classList.add("opacity-100");
+      list.classList.remove("absolute");
+      list.classList.add("pointer-events-auto");
+    }
+
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <>
-      <nav className="flex nav justify-between py-4 px-6 md:px-12 lg:px-20 xl:px-24 2xl:px-32 items-center">
-        <img className="w-32" src={logo} alt="pokemon-logo" />
-        <div className="flex align-middle gap-4 md:gap-6 lg:gap-10 xl:gap-20 2xl:gap-32">
-          <NavLink className="navlinks" to="/">
-            {" "}
-            Home{" "}
-          </NavLink>
-          <NavLink className="navlinks" to="/pokedex">
-            {" "}
-            Pokédex{" "}
-          </NavLink>
-          <NavLink className="navlinks" to="/fight">
-            {" "}
-            Fight{" "}
-          </NavLink>
-          <NavLink className="navlinks" to="/FightResults">
-            {" "}
-            Fight Results{" "}
-          </NavLink>
+      <nav className=" nav md:flex md:items-center nav md:justify-between py-4 md:py-6 lg:py-6 px-6 md:px-8 lg:px-12 items-center relative">
+        <div className="flex justify-between items-center">
+          <span>
+            <img className="w-32" src={logo} alt="pokemon-logo" />
+          </span>
+          <span className="text-3xl cursor-pointer mx-2 md:hidden block">
+            <button onClick={handleMenuToggle}>
+              {isMenuOpen ? (
+                <IoCloseOutline size={24} />
+              ) : (
+                <IoMenuOutline size={24} />
+              )}
+            </button>
+          </span>
         </div>
+        <ul
+          ref={listRef}
+          className="nav md:flex md:items-center w-full md:w-auto md:py-0 md:pl-0 pl-2 md:opacity-100 opacity-0 top-[-200px] transition-all ease-in duration-500 left-0 z-[-1] md:z-auto md:static align-middle absolute gap-4 md:gap-4 lg:gap-10 xl:gap-12 2xl:gap-20 lg:pr-8 xl:pr-12 2xl:pr-20"
+        >
+          <li className="font my-4 md:my-0 mx-4">
+            <NavLink className="navlinks" to="/">
+              {" "}
+              Home{" "}
+            </NavLink>
+          </li>
+          <li className="font my-4 md:my-0 mx-4">
+            <NavLink className="navlinks" to="/pokedex">
+              {" "}
+              Pokédex{" "}
+            </NavLink>
+          </li>
+          <li className="font my-4 md:my-0 mx-4">
+            <NavLink className="navlinks" to="/fight">
+              {" "}
+              Fight{" "}
+            </NavLink>
+          </li>
+          <li className="font my-4 md:my-0 mx-4">
+            <NavLink className="navlinks" to="/FightResults">
+              {" "}
+              Fight Results{" "}
+            </NavLink>
+          </li>
+        </ul>
       </nav>
       <main>
         <Outlet />
