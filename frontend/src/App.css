@@ -15,6 +15,9 @@
   background-color:#f5db13;
 }
 
+.font {
+  font-family: sans-serif;
+}
 
 @keyframes fadeIn {
   from {
