@@ -33,7 +33,7 @@ const ResultsTable = () => {
         <h2 className="py-5 text-4xl font-bold">Fight Results Table</h2>
       </div>
       <div className="flex justify-center item-center">
-        <table className="mb-10 shadow-2xl font-[Poppins] border-2 border-white w-1/2">
+        <table className="mb-10 shadow-2xl font-[Poppins] border-2 border-white w-2/3">
           <thead className="text-white">
             <tr className="bg-orange-500 text-xl">
               <th>Pokemon 1</th>
