@@ -6,7 +6,7 @@ import axios from "axios";
 const ResultsTable = () => {
   const [battleHistory, setBattleHistory] = useState([]);
 
-  const BASE_URL = 'https://pokefight-u2oc.onrender.com/'
+  const BASE_URL = 'https://pokefight-u2oc.onrender.com'
 
   useEffect(() => {
     const fetchBattleHistory = async () => {

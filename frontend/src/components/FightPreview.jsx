@@ -11,7 +11,7 @@ const FightPreview = () => {
   const [fightLogs, setFightLogs] = useState([]);
   const [battleHistory, setBattleHistory] = useState([]);
 
-  const BASE_URL = 'https://pokefight-u2oc.onrender.com/'
+  const BASE_URL = 'https://pokefight-u2oc.onrender.com'
 
   useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
