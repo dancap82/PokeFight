@@ -6,11 +6,13 @@ import axios from "axios";
 const ResultsTable = () => {
   const [battleHistory, setBattleHistory] = useState([]);
 
+  const BASE_URL = 'https://pokefight-u2oc.onrender.com'
+
   useEffect(() => {
     const fetchBattleHistory = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/fight-logs"
+          `${BASE_URL}/api/fight-logs`
         );
         setBattleHistory(response.data);
       } catch (error) {
