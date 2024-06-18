@@ -2,14 +2,14 @@ const express = require ("express");
 const cors = require ("cors");
 const pokemonRoutes = require ("./routes/pokemonRoutes"); 
 const connectDB = require ('./DB/dbConnection');
-const Fight =require ("./models/fightSchema");
+const Fight =require ("./models/FightSchema");
 require('dotenv').config();
 
 
 
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
