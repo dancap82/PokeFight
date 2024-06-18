@@ -1,6 +1,4 @@
 import "../App.css";
-
-
 import React, { useEffect, useState } from "react";
 
 const FightPreview = () => {
@@ -12,6 +10,8 @@ const FightPreview = () => {
   const [winner, setWinner] = useState(null);
   const [fightLogs, setFightLogs] = useState([]);
   const [battleHistory, setBattleHistory] = useState([]);
+
+  const BASE_URL = 'https://pokefight-u2oc.onrender.com/'
 
   useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
@@ -38,7 +38,7 @@ const FightPreview = () => {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/fight-logs")
+    fetch(`${BASE_URL}/api/fight-logs`)
       .then((response) => response.json())
       .then((data) => setBattleHistory(data))
       .catch((error) =>
@@ -107,7 +107,7 @@ const FightPreview = () => {
       setFightLogs(logs);
 
       // Save fight result to backend
-      fetch("http://localhost:3000/api/fight", {
+      fetch(`${BASE_URL}/api/fight`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
