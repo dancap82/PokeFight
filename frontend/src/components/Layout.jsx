@@ -34,7 +34,7 @@ function Layout() {
 
   return (
     <>
-      <nav className=" nav md:flex md:items-center nav md:justify-between py-4 md:py-6 lg:py-6 px-6 md:px-8 lg:px-12 items-center relative">
+      <nav className=" nav md:flex md:items-center md:justify-between py-4 md:py-6 lg:py-6 px-6 md:px-8 lg:px-12 items-center relative">
         <div className="flex justify-between items-center">
           <span>
             <img className="w-32" src={logo} alt="pokemon-logo" />
